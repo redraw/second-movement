@@ -35,6 +35,7 @@ const watch_face_t watch_faces[] = {
     stopwatch_face,
     countdown_face,
     alarm_face,
+    sleep_calculator_face,
     temperature_display_face,
     voltage_face,
     settings_face,
