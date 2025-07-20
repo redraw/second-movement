@@ -29,11 +29,11 @@
  * PROBABILITY face
  *
  * This face is a dice-rolling random number generator.
- * Supports dice with 2, 4, 6, 8, 10, 12, 20, or 100 sides.
+ * Supports dice with 2, 4, 6, 8, 10, 12, 20, 36, or 100 sides.
  *
  * Display format:
  * - Top: "Prb" (custom LCD) / "PR" (classic LCD)
- * - Top right: Die type (2, 4, 6, 8, 10, 12, 20, or "00" for d100)
+ * - Top right: Die type (2, 4, 6, 8, 10, 12, 20, 36, or "00" for d100)
  * - Hours:Minutes: Rolled value
  *   - No roll: "--:--"
  *   - Values 1-99: "  :XX"
