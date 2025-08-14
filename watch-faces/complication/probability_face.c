@@ -120,10 +120,10 @@ static void display_dice_roll(probability_state_t *state)
         // Coin flip: show "Heads" or "Tails" across hours, minutes, and first digit of seconds
         if (state->rolled_value == 1) {
             // Heads
-            watch_display_text(WATCH_POSITION_BOTTOM, "HEAdS ");
+            watch_display_text(WATCH_POSITION_BOTTOM, "CArA ");
         } else {
             // Tails
-            watch_display_text(WATCH_POSITION_BOTTOM, "TAiLS ");
+            watch_display_text(WATCH_POSITION_BOTTOM, "CrUz ");
         }
     } else {
         // Normal case: show rolled value using hours and minutes
