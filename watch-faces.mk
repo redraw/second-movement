@@ -50,4 +50,5 @@ SRCS += \
   ./watch-faces/complication/wareki_face.c \
   ./watch-faces/complication/deadline_face.c \
   ./watch-faces/complication/bytebase_face.c \
+  ./watch-faces/complication/metronome_face.c \
 # New watch faces go above this line.
