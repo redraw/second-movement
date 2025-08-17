@@ -37,8 +37,8 @@
 #define TAP_DETECTION_SECONDS 5
 #define ANIMATION_FRAMES 4
 #define SEGMENTS_PER_FRAME 2
-const uint16_t NUM_DICE_TYPES = 8; // Keep this consistent with # of dice types below
-const uint16_t DICE_TYPES[] = {2, 4, 6, 8, 10, 12, 20, 100};
+const uint16_t NUM_DICE_TYPES = 9; // Keep this consistent with # of dice types below
+const uint16_t DICE_TYPES[] = {2, 4, 6, 8, 10, 12, 20, 36, 100};
 
 // Animation frame data: each frame defines which pixels to set
 // Each frame can have up to SEGMENTS_PER_FRAME pixels
@@ -120,10 +120,10 @@ static void display_dice_roll(probability_state_t *state)
         // Coin flip: show "Heads" or "Tails" across hours, minutes, and first digit of seconds
         if (state->rolled_value == 1) {
             // Heads
-            watch_display_text(WATCH_POSITION_BOTTOM, "HEAdS ");
+            watch_display_text(WATCH_POSITION_BOTTOM, "CArA ");
         } else {
             // Tails
-            watch_display_text(WATCH_POSITION_BOTTOM, "TAiLS ");
+            watch_display_text(WATCH_POSITION_BOTTOM, "CrUz ");
         }
     } else {
         // Normal case: show rolled value using hours and minutes
