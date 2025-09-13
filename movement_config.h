@@ -36,15 +36,14 @@ const watch_face_t watch_faces[] = {
     alarm_face,
     probability_face,
     metronome_face,
-    pulsometer_face,
     bytebase_face,
-    settings_face,
+    activity_logging_face,
+    temperature_logging_face,
     set_time_face,
+    settings_face,
     voltage_face,
     temperature_display_face,
     accelerometer_status_face,
-    temperature_logging_face,
-    activity_logging_face,
     chirpy_demo_face,
     rtccount_face,
 };
@@ -113,5 +112,14 @@ const watch_face_t watch_faces[] = {
  * with multiple button presses firing.
 */
 #define MOVEMENT_DEBOUNCE_TICKS 4
+
+/* Determines what face to go to from the clock face on short press of the Alarm button.
+ * If defined, pressing the alarm button briefly while on the clock face will jump directly
+ * to the specified face index. This provides quick access to a frequently used face.
+ * If not defined, the alarm button short press will have no effect on the clock face.
+ * The alarm button long press will still toggle the hourly time signal.
+ * Example: #define MOVEMENT_QUICK_FACE_INDEX 6  // Jump to alarm face
+ */
+#define MOVEMENT_QUICK_FACE_INDEX 6
 
 #endif // MOVEMENT_CONFIG_H_
