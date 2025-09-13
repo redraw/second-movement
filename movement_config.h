@@ -29,8 +29,6 @@
 
 const watch_face_t watch_faces[] = {
     clock_face,
-    sunrise_sunset_face,
-    moon_phase_face,
     fast_stopwatch_face,
     countdown_face,
     alarm_face,
@@ -38,11 +36,12 @@ const watch_face_t watch_faces[] = {
     metronome_face,
     bytebase_face,
     activity_logging_face,
-    temperature_logging_face,
+    moon_phase_face,
+    sunrise_sunset_face,
     set_time_face,
     settings_face,
     voltage_face,
-    temperature_display_face,
+    temperature_logging_face,
     accelerometer_status_face,
     chirpy_demo_face,
     rtccount_face,
@@ -56,7 +55,7 @@ const watch_face_t watch_faces[] = {
  * Some folks also like to use this to hide the preferences and time set faces from the normal rotation.
  * If you don't want any faces to be excluded, set this to 0 and a long Mode press will have no effect.
  */
-#define MOVEMENT_SECONDARY_FACE_INDEX (MOVEMENT_NUM_FACES - 9)
+#define MOVEMENT_SECONDARY_FACE_INDEX (MOVEMENT_NUM_FACES - 7)
 
 /* Custom hourly chime tune. Check movement_custom_signal_tunes.h for options. */
 #define SIGNAL_TUNE_DEFAULT
@@ -118,8 +117,7 @@ const watch_face_t watch_faces[] = {
  * to the specified face index. This provides quick access to a frequently used face.
  * If not defined, the alarm button short press will have no effect on the clock face.
  * The alarm button long press will still toggle the hourly time signal.
- * Example: #define MOVEMENT_QUICK_FACE_INDEX 6  // Jump to alarm face
  */
-#define MOVEMENT_QUICK_FACE_INDEX 6
+#define MOVEMENT_QUICK_FACE_INDEX 7  // activity_face
 
 #endif // MOVEMENT_CONFIG_H_
