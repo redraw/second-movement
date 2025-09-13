@@ -76,4 +76,5 @@
 #include "rtccount_face.h"
 #include "bytebase_face.h"
 #include "metronome_face.h"
+#include "pin_face.h"
 // New includes go above this line.
