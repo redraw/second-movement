@@ -72,6 +72,7 @@
 #include "wareki_face.h"
 #include "deadline_face.h"
 #include "wordle_face.h"
+#include "endless_runner_face.h"
 #include "rtccount_face.h"
 #include "bytebase_face.h"
 #include "metronome_face.h"
