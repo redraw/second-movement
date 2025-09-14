@@ -302,6 +302,7 @@ bool totp_lfs_face_loop(movement_event_t event, void *context) {
             totp_face_display(totp_state);
             break;
         case EVENT_TIMEOUT:
+            movement_pin_service_lock();
             movement_move_to_face(0);
             break;
         case EVENT_ALARM_BUTTON_UP:
