@@ -34,12 +34,13 @@ const watch_face_t watch_faces[] = {
     advanced_alarm_face,
     sunrise_sunset_face,
     moon_phase_face,
+    totp_lfs_face,
     tally_face,
     activity_logging_face,
-    probability_face,
     metronome_face,
+    probability_face,
+    rpn_calculator_alt_face,
     bytebase_face,
-    totp_lfs_face,
     endless_runner_face,
 
     set_time_face,
@@ -123,6 +124,6 @@ const watch_face_t watch_faces[] = {
  * If not defined, the alarm button short press will have no effect on the clock face.
  * The alarm button long press will still toggle the hourly time signal.
  */
-#define MOVEMENT_QUICK_FACE_INDEX 7  // activity_face
+#define MOVEMENT_QUICK_FACE_INDEX 8  // activity_face
 
 #endif // MOVEMENT_CONFIG_H_
