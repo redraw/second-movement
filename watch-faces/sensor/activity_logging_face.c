@@ -166,8 +166,8 @@ static uint8_t _get_bar_height(uint16_t minutes, bool is_hourly_data) {
         return 0;                         // No segments (0-4 minutes per hour)
     } else {
         // Daily thresholds (original)
-        if (minutes >= 150) return 2;     // Both segments (150+ minutes per day)
-        if (minutes >= 30) return 1;      // Bottom segment only (30-150 minutes per day)
+        if (minutes >= 240) return 2;     // Both segments (240+ minutes per day)
+        if (minutes >= 120) return 1;      // Bottom segment only (120-240 minutes per day)
         return 0;                         // No segments (0-30 minutes per day)
     }
 }
@@ -219,16 +219,16 @@ static void _activity_logging_handle_today_page(activity_logging_state_t *state)
 
     if (state->display_index == 0) {
         // if we are at today, just show the count so far
-        snprintf(buf, 8, "%2d", timestamp.unit.day);
+        sprintf(buf, "%2d", timestamp.unit.day);
         watch_display_text(WATCH_POSITION_TOP_RIGHT, buf);
 
         if (state->show_emoticon) {
             char mood_face = _activity_logging_get_mood_face(state->active_minutes_today);
-            snprintf(buf, 8, "  %c", mood_face);
+            sprintf(buf, "  %c   ", mood_face);
             watch_display_text(WATCH_POSITION_BOTTOM, buf);
             watch_set_colon();
         } else {
-            snprintf(buf, 8, "%4d  ", state->active_minutes_today);
+            sprintf(buf, "%4d  ", state->active_minutes_today);
             watch_display_text(WATCH_POSITION_BOTTOM, buf);
         }
 
