@@ -37,8 +37,8 @@
 #define TAP_DETECTION_SECONDS 5
 #define ANIMATION_FRAMES 4
 #define SEGMENTS_PER_FRAME 2
-const uint16_t NUM_DICE_TYPES = 8; // Keep this consistent with # of dice types below
-const uint16_t DICE_TYPES[] = {2, 4, 6, 8, 10, 12, 20, 100};
+const uint16_t NUM_DICE_TYPES = 9; // Keep this consistent with # of dice types below
+const uint16_t DICE_TYPES[] = {2, 4, 6, 8, 10, 12, 20, 36, 100};
 
 // Animation frame data: each frame defines which pixels to set
 // Each frame can have up to SEGMENTS_PER_FRAME pixels
