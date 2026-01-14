@@ -81,4 +81,5 @@
 #include "ping_face.h"
 #include "rtccount_face.h"
 #include "bytebase_face.h"
+#include "metronome_face.h"
 // New includes go above this line.
