@@ -57,4 +57,5 @@ SRCS += \
   ./watch-faces/complication/ping_face.c \
   ./watch-faces/complication/bytebase_face.c \
   ./watch-faces/complication/metronome_face.c \
+  ./watch-faces/complication/rpn_calculator_alt_face.c \
 # New watch faces go above this line.

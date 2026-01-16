@@ -82,4 +82,5 @@
 #include "rtccount_face.h"
 #include "bytebase_face.h"
 #include "metronome_face.h"
+#include "rpn_calculator_alt_face.h"
 // New includes go above this line.
