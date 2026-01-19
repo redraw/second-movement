@@ -212,7 +212,7 @@ static void _metronome_tick_beat(metronome_state_t *state) {
             watch_buzzer_play_sequence((int8_t *)_sound_seq_beat, NULL);
         }
     }
-    sprintf(buf, "MN %d %03d%s", state->count, state->bpm, "bp");    
+    sprintf(buf, "MN %d %03d%s", state->count, state->bpm, "bp");
     watch_display_string(buf, 0);
 }
 
@@ -221,9 +221,10 @@ static void _metronome_event_tick(uint8_t subsecond, metronome_state_t *state) {
 
     state->curTick++;
 
-    // Determine target for this beat using fractional accumulation
+    // Determine target: base tick count plus extension if error accumulated
+    // Use epsilon to handle floating-point rounding errors
     int target = state->tick;
-    if (state->curCorrection >= 1.0) {
+    if (state->curCorrection >= 0.99) {
         target++;
     }
 
@@ -231,12 +232,10 @@ static void _metronome_event_tick(uint8_t subsecond, metronome_state_t *state) {
         _metronome_tick_beat(state);
         state->curTick = 0;
 
-        // Subtract 1.0 if we extended this beat (do this BEFORE adding new error)
-        if (state->curCorrection >= 1.0) {
+        // After beat fires: subtract if we used the extension, then accumulate for next beat
+        if (state->curCorrection >= 0.99) {
             state->curCorrection -= 1.0;
         }
-
-        // Add fractional error for this beat
         state->curCorrection += state->correction;
 
         if (state->curBeat < state->count) {
