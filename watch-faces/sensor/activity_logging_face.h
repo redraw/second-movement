@@ -50,8 +50,26 @@
 
 #define ACTIVITY_LOGGING_NUM_DAYS (14)
 
+typedef enum {
+    MODE_DAY = 0,
+    MODE_HISTOGRAM
+} activity_logging_mode_t;
+
+typedef enum {
+    ACTIVITY_LOGGING_TIMEFRAME_12H = 0,
+    ACTIVITY_LOGGING_TIMEFRAME_12D
+} activity_logging_timeframe_t;
+
+typedef enum {
+    HISTOGRAM_VIEW_CHART = 0,
+    HISTOGRAM_VIEW_MEDIAN,
+    HISTOGRAM_VIEW_MIN,
+    HISTOGRAM_VIEW_MAX
+} histogram_view_t;
+
 typedef struct {
     uint16_t activity_log[ACTIVITY_LOGGING_NUM_DAYS];   // the activity log
+    uint8_t hourly_data[24];                            // hourly activity data for today (0-23 hours)
     uint16_t data_points;                               // the number of days logged
     uint8_t display_index;                              // the index we are displaying on screen
     uint16_t active_minutes_today;                      // the number of active minutes logged today
