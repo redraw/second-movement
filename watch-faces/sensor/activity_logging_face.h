@@ -40,8 +40,6 @@
  *
  * A short press of the Alarm button moves backwards in the data log, showing yesterday's active minutes,
  * then the day before, etc. going back 14 days.
- * A short press of the Light button moves forward in the data log, looping around if we're on the most-recent day.
- * Holding the Light button will illuminate the display.
  *
  */
 
@@ -74,8 +72,9 @@ typedef struct {
     uint8_t display_index;                              // the index we are displaying on screen
     uint16_t active_minutes_today;                      // the number of active minutes logged today
     bool previous_minute_was_active;                    // we only want to count two or more consecutive active minutes
-    bool show_emoticon;                                 // whether to show emoticon instead of count
-    uint8_t emoticon_tick_count;                        // tick counter for emoticon display (1 second = 1 tick)
+    activity_logging_mode_t mode;                       // current mode (day/histogram)
+    activity_logging_timeframe_t timeframe_mode;        // histogram timeframe (1d/12d)
+    histogram_view_t histogram_view;                    // current histogram view (chart/median/min/max)
 } activity_logging_state_t;
 
 void activity_logging_face_setup(uint8_t watch_face_index, void ** context_ptr);
