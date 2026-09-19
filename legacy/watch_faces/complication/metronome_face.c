@@ -76,7 +76,7 @@ static void _metronome_start_tap_tempo(metronome_state_t *state) {
     watch_set_indicator(WATCH_INDICATOR_SIGNAL);
 
     // try to enable accelerometer detection if available (optional)
-    if (movement_enable_tap_detection_if_available()) {
+    if (movement_enable_tap_detection_if_available(false)) {
         printf("accelerometer tap detection enabled\n");
     } else {
         printf("accelerometer not available, using light button only\n");
@@ -388,11 +388,11 @@ bool metronome_face_loop(movement_event_t event, void *context) {
             }
             break;
         case EVENT_MODE_BUTTON_UP:
-            movement_move_to_next_face();
+            movement_move_to_next_page();
             break;
         case EVENT_TIMEOUT:
             if (state->mode != metRun) {
-                movement_move_to_face(0);
+                movement_move_to_page(0);
             }
             break;
         case EVENT_LOW_ENERGY_UPDATE:

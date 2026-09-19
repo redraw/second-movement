@@ -90,4 +90,9 @@
 #include "tunes_face.h"
 #include "page_ordering_face.h"
 #include "tennis_face.h"
+#include "bytebase_face.h"
+#include "met_face.h"
+#include "metronome_face.h"
+#include "rpn_calculator_alt_face.h"
+#include "sleep_calculator_face.h"
 // New includes go above this line.

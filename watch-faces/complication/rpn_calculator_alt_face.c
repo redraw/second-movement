@@ -397,7 +397,7 @@ static bool handle_operation_mode(movement_event_t event, calculator_state_t *s)
             }
             break;
         case EVENT_MODE_BUTTON_UP:
-            movement_move_to_next_face();
+            movement_move_to_next_page();
             return false;
         case EVENT_LIGHT_BUTTON_UP:
             proposed_stack_size = s->stack_size - functions[s->fn_index].input;
@@ -497,7 +497,7 @@ bool rpn_calculator_alt_face_loop(movement_event_t event, void *context) {
             show_stack_top(s);
             return true;
         case EVENT_TIMEOUT:
-            movement_move_to_face(0);
+            movement_move_to_page(0);
             return true;
         case EVENT_LOW_ENERGY_UPDATE:
             return true;

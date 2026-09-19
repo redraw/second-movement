@@ -34,18 +34,20 @@
     F(alarm) \
     F(fast_stopwatch) \
     F(countdown) \
+    F(metronome) \
     F(sunrise_sunset) \
-    F(solar_time) \
     F(moon_phase)
 
 #define SECONDARY_FACES(F) \
     F(totp_lfs) \
-    F(tomato) \
-    F(tunes) \
+    F(rpn_calculator_alt) \
     F(probability) \
-    F(wordle) \
+    F(activity_logging) \
+    F(tunes) \
     F(counter) \
-    F(tennis)
+    F(bytebase) \
+    F(met) \
+    F(sleep_calculator)
 
 #define TERTIARY_FACES(F) \
     F(settings) \
@@ -54,7 +56,6 @@
     F(temperature_display) \
     F(pin) \
     F(voltage) \
-    F(rtccount) \
     F(finetune) \
     F(nanosec) \
     F(firmware_flasher) \

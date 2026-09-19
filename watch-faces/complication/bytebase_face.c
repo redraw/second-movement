@@ -261,7 +261,7 @@ bool bytebase_face_loop(movement_event_t event, void *context) {
             break;
         case EVENT_MODE_BUTTON_UP:
             _abort_quick_ticks(state);
-            movement_move_to_next_face();
+            movement_move_to_next_page();
             return false;
         case EVENT_LIGHT_BUTTON_DOWN:
             if (state->editing) {
@@ -323,7 +323,7 @@ bool bytebase_face_loop(movement_event_t event, void *context) {
         case EVENT_TIMEOUT:
             _abort_quick_ticks(state);
             state->editing = false;
-            movement_move_to_face(0);
+            movement_move_to_page(0);
             break;
         default:
             return movement_default_loop_handler(event);

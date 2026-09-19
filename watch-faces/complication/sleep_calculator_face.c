@@ -211,7 +211,7 @@ bool sleep_calculator_face_loop(movement_event_t event, void *context) {
             break;
             
         case EVENT_TIMEOUT:
-            movement_move_to_face(0);
+            movement_move_to_page(0);
             break;
             
         case EVENT_LOW_ENERGY_UPDATE:
