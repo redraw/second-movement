@@ -117,13 +117,13 @@ static void display_dice_roll(probability_state_t *state)
         // No roll yet - show dashes
         watch_display_text(WATCH_POSITION_BOTTOM, "----  ");
     } else if (state->dice_sides == 2) {
-        // Coin flip: show "Heads" or "Tails" across hours, minutes, and first digit of seconds
+        // Coin flip: show "Cara" or "Cruz" across hours, minutes, and seconds
         if (state->rolled_value == 1) {
-            // Heads
-            watch_display_text(WATCH_POSITION_BOTTOM, "HEAdS ");
+            // Cara
+            watch_display_text(WATCH_POSITION_BOTTOM, " CArA ");
         } else {
-            // Tails
-            watch_display_text(WATCH_POSITION_BOTTOM, "TAiLS ");
+            // Cruz
+            watch_display_text(WATCH_POSITION_BOTTOM, " CrUZ ");
         }
     } else {
         // Normal case: show rolled value using hours and minutes

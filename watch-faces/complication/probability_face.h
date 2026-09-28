@@ -38,7 +38,7 @@
  *   - No roll: "--:--"
  *   - Values 1-99: "  :XX"
  *   - Value 100: " 1:00"
- *   - Coin flip: "HE:AD:S " or "TA:IL:S "
+ *   - Coin flip: " C:Ar:A " or " C:rU:Z "
  *
  * Controls:
  * - LIGHT button: Cycle through die type
@@ -75,4 +75,3 @@ void probability_face_resign(void *context);
 })
 
 #endif // PROBABILITY_FACE_H_
-
