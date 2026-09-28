@@ -1250,7 +1250,7 @@ void app_init(void) {
     // populate the DST offset cache
     _movement_update_dst_offset_cache();
 
-    if (movement_state.accelerometer_motion_threshold == 0) movement_state.accelerometer_motion_threshold = 32;
+    if (movement_state.accelerometer_motion_threshold == 0) movement_state.accelerometer_motion_threshold = 8;
 
     movement_state.signal_volume = MOVEMENT_DEFAULT_SIGNAL_VOLUME;
     movement_state.alarm_volume = MOVEMENT_DEFAULT_ALARM_VOLUME;

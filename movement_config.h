@@ -56,6 +56,7 @@
     F(temperature_display) \
     F(pin) \
     F(voltage) \
+    F(accelerometer_status) \
     F(finetune) \
     F(nanosec) \
     F(firmware_flasher) \
