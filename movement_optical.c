@@ -28,6 +28,20 @@
 
 #ifdef HAS_IR_SENSOR
 
+static movement_optical_config_t shared_config = {
+    .rx_baud = 3600u, .tx_baud = 300u,
+    .irda = false, .tx_invert = false, .rx_invert = false,
+    .poll_hz = 8u, .tx_hz = 64u, .settle_ticks = 4u, .ack_count = 1u,
+};
+
+movement_optical_config_t movement_optical_get_shared_config(void) {
+    return shared_config;
+}
+
+void movement_optical_set_shared_config(const movement_optical_config_t *cfg) {
+    shared_config = *cfg;
+}
+
 /* Internal phases. */
 enum {
     LINK_IDLE = 0,   /* closed */

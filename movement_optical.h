@@ -66,6 +66,11 @@ typedef struct {
     uint8_t  ack_count;       /* bare-id ACK repeats, clamped to [1, ACK_MAX] */
 } movement_optical_config_t;
 
+/* Shared current settings. The flasher menu publishes changes; other faces
+ * take a copy when they start an optical session. Resets on reboot. */
+movement_optical_config_t movement_optical_get_shared_config(void);
+void movement_optical_set_shared_config(const movement_optical_config_t *cfg);
+
 typedef enum {
     MOVEMENT_OPTICAL_NONE = 0,  /* nothing happened this tick */
     MOVEMENT_OPTICAL_FRAMES,    /* >= 1 frame ready; drain with next_frame() */

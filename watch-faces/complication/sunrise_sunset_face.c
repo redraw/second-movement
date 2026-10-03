@@ -40,6 +40,8 @@
 #endif
 
 static const uint8_t _location_count = sizeof(longLatPresets) / sizeof(long_lat_presets_t);
+static void _sunrise_sunset_face_update(sunrise_sunset_state_t *state);
+static sunrise_sunset_lat_lon_settings_t _sunrise_sunset_face_struct_from_latlon(int16_t val);
 
 static void persist_location_to_filesystem(movement_location_t new_location) {
     movement_location_t maybe_location = {0};
@@ -57,6 +59,54 @@ static movement_location_t load_location_from_filesystem() {
 
     return location;
 }
+
+#ifdef HAS_IR_SENSOR
+/* Flag 0x20, "LOC1", then signed int16 latitude and longitude in
+ * hundredths of a degree, little endian. ACK is the bare frame ID. */
+#define LOCATION_IR_FLAG 0x20u
+
+static bool location_ir_store(const watch_optical_frame_t *frame) {
+    if (frame->flags != LOCATION_IR_FLAG || frame->size != 8 ||
+        memcmp(frame->payload, "LOC1", 4) != 0) return false;
+
+    int16_t latitude = (int16_t)((uint16_t)frame->payload[4] |
+                                 ((uint16_t)frame->payload[5] << 8));
+    int16_t longitude = (int16_t)((uint16_t)frame->payload[6] |
+                                  ((uint16_t)frame->payload[7] << 8));
+    if (latitude < -9000 || latitude > 9000 ||
+        longitude < -18000 || longitude > 18000) return false;
+
+    movement_location_t location = {0};
+    location.bit.latitude = latitude;
+    location.bit.longitude = longitude;
+    if (location.reg == 0) return false; /* Zero marks an unset location. */
+
+    movement_location_t stored = {0};
+    if (filesystem_read_file("location.u32", (char *)&stored.reg, sizeof(stored.reg)) &&
+        stored.reg == location.reg) return true; /* Retry after a lost ACK. */
+    return filesystem_write_file("location.u32", (char *)&location.reg, sizeof(location.reg));
+}
+
+static void location_ir_enter(sunrise_sunset_state_t *state) {
+    state->ir_location_active = true;
+    movement_optical_config_t cfg = movement_optical_get_shared_config();
+    movement_optical_init(&state->ir_location_link, &cfg);
+    movement_optical_listen(&state->ir_location_link);
+    watch_clear_display();
+    watch_display_text_with_fallback(WATCH_POSITION_TOP, "IrLoC", "Ir");
+    watch_display_text(WATCH_POSITION_BOTTOM, " rEAdy");
+}
+
+static void location_ir_exit(sunrise_sunset_state_t *state) {
+    movement_optical_stop(&state->ir_location_link);
+    state->ir_location_active = false;
+    movement_location_t location = load_location_from_filesystem();
+    state->working_latitude = _sunrise_sunset_face_struct_from_latlon(location.bit.latitude);
+    state->working_longitude = _sunrise_sunset_face_struct_from_latlon(location.bit.longitude);
+    state->rise_index = 0;
+    _sunrise_sunset_face_update(state);
+}
+#endif
 
 static void _sunrise_sunset_set_expiration(sunrise_sunset_state_t *state, watch_date_time_t next_rise_set) {
     uint32_t timestamp = watch_utility_date_time_to_unix_time(next_rise_set, 0);
@@ -473,6 +523,9 @@ void sunrise_sunset_face_activate(void *context) {
 #endif
 
     sunrise_sunset_state_t *state = (sunrise_sunset_state_t *)context;
+#ifdef HAS_IR_SENSOR
+    state->ir_location_active = false;
+#endif
     movement_location_t movement_location = load_location_from_filesystem();
     state->working_latitude = _sunrise_sunset_face_struct_from_latlon(movement_location.bit.latitude);
     state->working_longitude = _sunrise_sunset_face_struct_from_latlon(movement_location.bit.longitude);
@@ -480,6 +533,38 @@ void sunrise_sunset_face_activate(void *context) {
 
 bool sunrise_sunset_face_loop(movement_event_t event, void *context) {
     sunrise_sunset_state_t *state = (sunrise_sunset_state_t *)context;
+
+#ifdef HAS_IR_SENSOR
+    if (state->ir_location_active) {
+        switch (event.event_type) {
+            case EVENT_TICK:
+                if (movement_optical_tick(&state->ir_location_link) == MOVEMENT_OPTICAL_FRAMES) {
+                    watch_optical_frame_t frame;
+                    while (movement_optical_next_frame(&state->ir_location_link, &frame)) {
+                        if (location_ir_store(&frame)) {
+                            movement_optical_send_ack(&state->ir_location_link, frame.id);
+                            break;
+                        }
+                    }
+                }
+                return true;
+            case EVENT_ALARM_BUTTON_UP:
+                location_ir_exit(state);
+                return true;
+            case EVENT_LOW_ENERGY_UPDATE:
+                movement_optical_stop(&state->ir_location_link);
+                state->ir_location_active = false;
+                return true;
+            case EVENT_TIMEOUT:
+            case EVENT_LIGHT_BUTTON_DOWN:
+            case EVENT_LIGHT_BUTTON_UP:
+            case EVENT_LIGHT_LONG_PRESS:
+                return true;
+            default:
+                return movement_default_loop_handler(event);
+        }
+    }
+#endif
 
     switch (event.event_type) {
         case EVENT_ACTIVATE:
@@ -529,6 +614,12 @@ bool sunrise_sunset_face_loop(movement_event_t event, void *context) {
             }
             break;
         case EVENT_LIGHT_LONG_PRESS:
+#ifdef HAS_IR_SENSOR
+            if (state->page == 0) {
+                location_ir_enter(state);
+                break;
+            }
+#endif
             if (_location_count <= 1) break;
             else if (!state->page) movement_illuminate_led();
             break;
@@ -588,6 +679,12 @@ bool sunrise_sunset_face_loop(movement_event_t event, void *context) {
 
 void sunrise_sunset_face_resign(void *context) {
     sunrise_sunset_state_t *state = (sunrise_sunset_state_t *)context;
+#ifdef HAS_IR_SENSOR
+    if (state->ir_location_active) {
+        movement_optical_stop(&state->ir_location_link);
+        state->ir_location_active = false;
+    }
+#endif
     state->page = 0;
     state->active_digit = 0;
     state->rise_index = 0;

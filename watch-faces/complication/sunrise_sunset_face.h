@@ -31,12 +31,17 @@
  * The Sunrise/Sunset face is designed to display the next sunrise or sunset
  * for a given location. It also functions as an interface for setting the
  * location register, which other watch faces can use for various purposes.
+ * On boards with an IR sensor, long-press Light on the main page to receive
+ * a location update from sensor-watch-ir-tools/bin/location_sender.py.
  *
  * Refer to the wiki for usage instructions:
  *  https://www.sensorwatch.net/docs/watchfaces/complication/#sunrisesunset
  */
 
 #include "movement.h"
+#ifdef HAS_IR_SENSOR
+#include "movement_optical.h"
+#endif
 
 typedef struct {
     uint8_t sign: 1;    // 0-1
@@ -56,6 +61,10 @@ typedef struct {
     sunrise_sunset_lat_lon_settings_t working_latitude;
     sunrise_sunset_lat_lon_settings_t working_longitude;
     uint8_t longLatToUse;
+#ifdef HAS_IR_SENSOR
+    bool ir_location_active;
+    movement_optical_t ir_location_link;
+#endif
 } sunrise_sunset_state_t;
 
 void sunrise_sunset_face_setup(uint8_t watch_face_index, void ** context_ptr);

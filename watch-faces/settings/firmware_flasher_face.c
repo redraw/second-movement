@@ -263,14 +263,13 @@ static const uint8_t  ack_settle_options[] = { 0, 1, 2, 4, 8, 16, 32 };
 #define POLL_RATE_OPTION_COUNT  (sizeof(poll_rate_options)  / sizeof(poll_rate_options[0]))
 #define ACK_SETTLE_OPTION_COUNT (sizeof(ack_settle_options) / sizeof(ack_settle_options[0]))
 
-// Index of each option's default value in its lookup table.
-// rx 3600 / tx 300 / NRZ, RX 8 Hz, ACK 64 Hz, 4-tick ACK settle. NRZ over IrDA
-// because IrDA keeps the active-low LED lit ~80% of the time (see watch_optical.h).
 #define RX_BAUD_DEFAULT_INDEX    7   // = 3600 baud
 #define TX_BAUD_DEFAULT_INDEX    2   // =  300 baud
 #define POLL_RATE_DEFAULT_INDEX  3   // =    8 Hz
 #define ACK_RATE_DEFAULT_INDEX   (POLL_RATE_OPTION_COUNT - 1)  // = 64 Hz
 #define ACK_SETTLE_DEFAULT_INDEX 3   // = 4 ticks
+
+static movement_optical_config_t make_link_config(const firmware_flasher_state_t *state);
 
 static void render_menu(const firmware_flasher_state_t *state);
 static void render_test(const firmware_flasher_state_t *state);
@@ -291,9 +290,8 @@ static bool is_link_active(const firmware_flasher_state_t *state) {
            state->phase == IR_FLASHER_PHASE_WAIT_BLOCK;
 }
 
-// Reset every link parameter to the known-good default found by hardware
-// testing (see RX_BAUD_DEFAULT_INDEX et al). Used at first setup and again when
-// the settings are re-locked from the menu.
+// Reset every link parameter to the tested profile. Used at first setup and
+// again when the settings are re-locked from the menu.
 static void set_defaults(firmware_flasher_state_t *state) {
     state->rx_baud_index    = RX_BAUD_DEFAULT_INDEX;
     state->tx_baud_index    = TX_BAUD_DEFAULT_INDEX;
@@ -301,11 +299,11 @@ static void set_defaults(firmware_flasher_state_t *state) {
     state->poll_rate_index  = POLL_RATE_DEFAULT_INDEX;
     state->ack_rate_index   = ACK_RATE_DEFAULT_INDEX;
     state->ack_settle_index = ACK_SETTLE_DEFAULT_INDEX;
-    state->ack_count        = IR_FLASHER_ACK_COUNT_MIN;   // 1 = no redundancy
-    // Data-bit invert (ISO 7816), not optical polarity; no effect in IrDA. Default
-    // OFF: correct for IrDA, and for NRZ both ends just need to agree.
+    state->ack_count        = IR_FLASHER_ACK_COUNT_MIN;
     state->tx_invert        = false;
     state->rx_invert        = false;
+    movement_optical_config_t cfg = make_link_config(state);
+    movement_optical_set_shared_config(&cfg);
 }
 
 void firmware_flasher_face_setup(uint8_t watch_face_index, void **context_ptr) {
@@ -480,6 +478,12 @@ bool firmware_flasher_face_loop(movement_event_t event, void *context) {
             return movement_default_loop_handler(event);
     }
 
+    if (state->phase == IR_FLASHER_PHASE_MENU &&
+        (event.event_type == EVENT_ALARM_BUTTON_UP || event.event_type == EVENT_LIGHT_LONG_PRESS)) {
+        movement_optical_config_t cfg = make_link_config(state);
+        movement_optical_set_shared_config(&cfg);
+    }
+
     // RX/TX are opened with run_in_standby=true, so the link stays alive while
     // the framework sleeps between ticks.
     return true;
@@ -515,7 +519,7 @@ static void enter_test(firmware_flasher_state_t *state) {
     state->test_frames_acked    = 0;
     state->session_is_patch     = false;   // set true only by a verified patch ENTER
     state->pending_ack_advances = false;
-    movement_optical_config_t cfg = make_link_config(state);
+    movement_optical_config_t cfg = movement_optical_get_shared_config();
     movement_optical_init(&state->link, &cfg);
     movement_optical_listen(&state->link);
     state->phase = IR_FLASHER_PHASE_TEST;
