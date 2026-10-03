@@ -39,12 +39,11 @@
     F(moon_phase)
 
 #define SECONDARY_FACES(F) \
-    F(totp_lfs) \
+    F(activity_logging) \
     F(rpn_calculator_alt) \
     F(probability) \
-    F(activity_logging) \
+    F(totp_lfs) \
     F(tunes) \
-    F(counter) \
     F(bytebase) \
     F(met) \
     F(sleep_calculator)
@@ -57,12 +56,12 @@
     F(pin) \
     F(voltage) \
     F(accelerometer_status) \
-    F(finetune) \
-    F(nanosec) \
     F(firmware_flasher) \
     F(ir_rx) \
-    F(ir_tx)
-
+    F(ir_tx) \
+    F(finetune) \
+    F(nanosec) \
+    F(character_set)
 
 /* Determines the intensity of the led colors
  * Set a hex value 0-15 with 0x0 being off and 0xF being max intensity
