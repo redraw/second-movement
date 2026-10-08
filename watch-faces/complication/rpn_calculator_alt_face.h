@@ -28,8 +28,8 @@
 /* 
  * RPN Calculator alternate face.
  *
- * Operations appear in the 'day' section; ALARM changes between operations when
- * operation is flashing. LIGHT executes current operation.
+ * Operations appear in the 'day' section; LIGHT changes between operations when
+ * operation is flashing. ALARM executes current operation.
  *
  * This is the alternate face because it has a non-traditional number entry system which
  * I call 'guess a number'. In number entry mode, the watch tries to guess which number you
@@ -38,7 +38,7 @@
  *
  * Example of entering the number 27
  *  - select the NO operation (probably unnecessary, as this is the default),
- *    and execute it by hitting LIGHT.
+ *    and execute it by hitting ALARM.
  *  - you are now in number entry mode; you know this because nothing is flashing.
  *  - Watch displays 10; you hit ALARM to say you want a larger number.
  *  - Watch displays 100; you hit MODE to say you want a smaller number.

@@ -400,6 +400,10 @@ static bool handle_operation_mode(movement_event_t event, calculator_state_t *s)
             movement_move_to_next_face();
             return false;
         case EVENT_LIGHT_BUTTON_UP:
+            s->fn_index = (s->fn_index + 1) % FUNCTIONS_LEN;
+            show_fn(s, 0);
+            break;
+        case EVENT_ALARM_BUTTON_UP:
             proposed_stack_size = s->stack_size - functions[s->fn_index].input;
             if (proposed_stack_size < 0 || proposed_stack_size + functions[s->fn_index].output > CALC_MAX_STACK_SIZE) {
                 movement_play_signal();
@@ -410,10 +414,6 @@ static bool handle_operation_mode(movement_event_t event, calculator_state_t *s)
                 s->fn_index = 0;
                 show_fn(s, 0);
             }
-            break;
-        case EVENT_ALARM_BUTTON_UP:
-            s->fn_index = (s->fn_index + 1) % FUNCTIONS_LEN;
-            show_fn(s, 0);
             break;
         case EVENT_LIGHT_LONG_PRESS:
             if (s->stack_size > 0) {
