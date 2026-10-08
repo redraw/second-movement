@@ -21,7 +21,8 @@
  * gold and -2 for silver. On a resistor's tolerance band it gives 1, 2, 5
  * or 10 percent. ALARM advances the selected color.
  *
- * Hold ALARM to switch to value-to-code mode, marked by the bell icon.
+ * Hold ALARM to switch to value-to-code mode, marked by the signal icon for
+ * resistors and the bell icon for capacitors.
  * For resistors, I1, I2, I3 and I4 edit the first significant digit, second
  * significant digit, power-of-ten multiplier and tolerance. LIGHT advances
  * between fields; ALARM increments the selected numeric field. The lower
@@ -59,8 +60,9 @@
  * multiplier field, and a result page. ALARM changes the selected digit or
  * multiplier; hold ALARM to switch between frequency and period input.
  * Frequency uses Hz through GHz; period uses ps through s. The two-character
- * input labels use H for Hz when a prefix is present (kH means kHz). The
- * result chooses a suitable unit. Zero has no reciprocal.
+ * input and result labels use H for Hz when a prefix is present (kH means
+ * kHz). Both use four numeric digits and two unit digits. The result chooses
+ * a suitable unit. Zero has no reciprocal.
  *
  * The RC tool uses the values currently selected in the resistor and
  * capacitor tools. LIGHT cycles through Fc (cutoff frequency 1 / (2*pi*R*C)),
@@ -72,28 +74,63 @@
  * resistor. The face remains displayed through inactivity and low-energy mode.
  */
 typedef struct {
-    uint8_t tool;            // 0 resistor, 1 capacitor, 2 temperature, 3 dipole, 4 frequency, 5 RC
+    uint8_t direction;       // 0 code -> value, 1 value -> code
+    uint8_t selected_band;
+    uint8_t colors[4];
+    uint8_t value[4];        // numeric-entry digits, multiplier, tolerance
+} unit_converter_resistor_t;
+
+typedef struct {
+    uint8_t direction;
+    uint8_t selected_band;
+    uint8_t digits[4];       // three printed digits; fourth byte is unused
+} unit_converter_capacitor_t;
+
+typedef struct {
+    uint8_t digits[4];
+    uint8_t field;           // 0 sign, 1-4 digits, 5 result
+    bool negative;
+    bool fahrenheit;
+} unit_converter_temperature_t;
+
+typedef struct {
+    uint8_t digits[4];
+    uint8_t field;           // 0-3 digits, 4 multiplier, 5 total length, 6 each arm
+    bool hundredths;
+    uint8_t prefix;          // 0 Hz, 1 kHz, 2 MHz
+} unit_converter_dipole_t;
+
+typedef struct {
+    uint8_t digits[4];
+    uint8_t field;           // 0-3 digits, 4 multiplier, 5 result
+    bool is_period;
+    uint8_t prefix[2];       // 0 frequency, 1 period
+} unit_converter_frequency_t;
+
+typedef struct {
+    uint8_t page;            // 0 cutoff frequency, 1 one tau, 2 five tau
+} unit_converter_rc_t;
+
+typedef enum {
+    UNIT_CONVERTER_TOOL_RESISTOR,
+    UNIT_CONVERTER_TOOL_CAPACITOR,
+    UNIT_CONVERTER_TOOL_TEMPERATURE,
+    UNIT_CONVERTER_TOOL_DIPOLE,
+    UNIT_CONVERTER_TOOL_FREQUENCY,
+    UNIT_CONVERTER_TOOL_RC,
+    UNIT_CONVERTER_TOOL_COUNT,
+} unit_converter_tool_t;
+
+typedef struct {
+    unit_converter_tool_t tool;
     uint8_t menu_index;      // menu order: resistor, capacitor, RC, frequency, antenna, temperature
     bool in_menu;
-    uint8_t component;       // 0 resistor, 1 capacitor
-    uint8_t direction;       // 0 code -> value, 1 value -> code
-    uint8_t component_directions[2]; // preserve each component's input mode
-    uint8_t selected_band;
-    uint8_t selections[2][4]; // resistor colors; capacitor printed digits
-    uint8_t resistor_value[4]; // numeric-entry digits, multiplier, tolerance
-    uint8_t temperature_digits[4];
-    uint8_t temperature_field; // 0 sign, 1-4 digits, 5 result
-    bool temperature_negative;
-    bool temperature_fahrenheit;
-    uint8_t dipole_digits[4];
-    uint8_t dipole_field; // 0-3 digits, 4 multiplier, 5 total length, 6 each arm
-    bool dipole_hundredths;
-    uint8_t dipole_prefix; // 0 Hz, 1 kHz, 2 MHz
-    uint8_t frequency_digits[4];
-    uint8_t frequency_field; // 0-3 digits, 4 multiplier, 5 result
-    bool frequency_is_period;
-    uint8_t frequency_prefix[2]; // 0 frequency, 1 period
-    uint8_t rc_page;         // 0 cutoff frequency, 1 one tau, 2 five tau
+    unit_converter_resistor_t resistor;
+    unit_converter_capacitor_t capacitor;
+    unit_converter_temperature_t temperature;
+    unit_converter_dipole_t dipole;
+    unit_converter_frequency_t frequency;
+    unit_converter_rc_t rc;
 } unit_converter_state_t;
 
 void unit_converter_face_setup(uint8_t watch_face_index, void **context_ptr);
