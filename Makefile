@@ -169,6 +169,10 @@ endif
 
 include watch-faces.mk
 
+# Keep a linker map so utils/face_sizes.py can report the firmware bytes
+# actually retained for each configured face after --gc-sections.
+LDFLAGS += -Wl,-Map=$(BUILD)/firmware.map
+
 SRCS += \
   ./movement_optical.c \
   ./movement.c \

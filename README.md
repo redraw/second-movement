@@ -39,6 +39,14 @@ Optionally you can set the watch time when building the firmware using `TIMESET=
 
 If you'd like to modify which faces are built and included in the firmware, edit `movement_config.h`. You will get a compilation error if you enable more faces than the watch can store.
 
+To see the linked size of each enabled face, run:
+
+```
+python3 utils/face_sizes.py --board sensorwatch_pro --display classic --sort flash-desc
+```
+
+Use your own board and display values. The script prints an aligned plain-text table without extra Python packages. Flash descending is the default; `--sort` also accepts `flash-asc`, `ram-desc`, `ram-asc`, `name`, and `group`. The script builds incrementally, reads each face's retained sections from the linker map, and gets firmware totals from the same `arm-none-eabi-size -t` command used by `make size`. Each percentage is a share of the corresponding firmware total. Shared libraries, linker padding, and merged strings are not assigned to an individual face. For an existing build, `--no-build` skips compilation.
+
 Installing firmware to the watch
 ----------------------------
 To install the firmware onto your Sensor Watch board, plug the watch into your USB port and double tap the tiny Reset button on the back of the board. You should see the LED light up red and begin pulsing. (If it does not, make sure you didn’t plug the board in upside down). Once you see the `WATCHBOOT` drive appear on your desktop, type `make install`. This will convert your compiled program to a UF2 file, and copy it over to the watch.
