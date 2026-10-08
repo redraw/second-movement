@@ -90,6 +90,7 @@
 #include "tunes_face.h"
 #include "page_ordering_face.h"
 #include "tennis_face.h"
+#include "unit_converter_face.h"
 #include "bytebase_face.h"
 #include "met_face.h"
 #include "metronome_face.h"

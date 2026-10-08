@@ -44,6 +44,7 @@
     F(probability) \
     F(totp_lfs) \
     F(tunes) \
+    F(unit_converter) \
     F(bytebase) \
     F(met) \
     F(sleep_calculator)

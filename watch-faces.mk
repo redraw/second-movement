@@ -65,6 +65,7 @@ SRCS += \
   ./watch-faces/complication/tide_face.c \
   ./watch-faces/settings/tunes_face.c \
   ./watch-faces/complication/tennis_face.c \
+  ./watch-faces/complication/unit_converter_face.c \
   ./watch-faces/complication/bytebase_face.c \
   ./watch-faces/complication/met_face.c \
   ./watch-faces/complication/metronome_face.c \
